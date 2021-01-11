@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:todoapp/Models/global.dart';
+import 'package:todoapp/models/classes/Task.dart';
+import 'package:todoapp/models/widgets/intray_todo_widget.dart';
 
 class IntrayPage extends StatefulWidget {
   @override
@@ -7,64 +10,47 @@ class IntrayPage extends StatefulWidget {
 }
 
 class _IntrayPageState extends State<IntrayPage> {
+  List<Task> taskList = [];
+
   @override
   Widget build(BuildContext context) {
-    return Container(
+    if(taskList.isEmpty){
+      taskList = getList();
+    }
 
+    return Container(
       color: darkGreyColor,
-      child: ListView(
-        padding: EdgeInsets.only(top:220),
-        children: getList(),
-      ),
+      child: _buildList(context),
+
     );
   }
 
-  List<Widget> getList(){
-    return [
-      Container(
-        height: 100,
-        color: Colors.red,
+  Widget _buildListTile(BuildContext context, Task item) {
+    return ListTile(
+      key: Key(item.taskId),
+      title: IntrayTodo(
+        title: item.title,
       ),
-      Container(
-        height: 100,
-        color: Colors.blue,
-      ),
-      Container(
-        height: 100,
-        color: Colors.red,
-      ),
-      Container(
-        height: 100,
-        color: Colors.blue,
-      ),
-      Container(
-        height: 100,
-        color: Colors.red,
-      ),
-      Container(
-        height: 100,
-        color: Colors.blue,
-      ),
-      Container(
-        height: 100,
-        color: Colors.red,
-      ),
-      Container(
-        height: 100,
-        color: Colors.blue,
-      ),
+    );
 
-      Container(
-        height: 100,
-        color: Colors.red,
-      ),
-      Container(
-        height: 100,
-        color: Colors.blue,
-      ),
+  }
 
+  Widget _buildList(BuildContext context) {
 
+     return ListView(
+       scrollDirection: Axis.vertical,
+       padding: EdgeInsets.only(top: 300.0),
 
-    ];
+       children: taskList.map((Task item) => _buildListTile(context, item)).toList()
+     );
+
+  }
+
+  List<Task> getList() {
+    for (int i = 0; i < 10; i++) {
+      taskList
+          .add(new Task("My fist todo" + i.toString(), false, i.toString()));
+    }
+    return taskList;
   }
 }
